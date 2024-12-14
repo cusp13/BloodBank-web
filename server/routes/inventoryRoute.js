@@ -9,7 +9,12 @@ router.post("/add", authMiddleware, async (req, res) => {
   try {
     // valiadate email and inventoryType
     const user = await User.findOne({ email: req.body.email });
-    if (!user) throw new Error("Invalid Email");
+    if (!user) {
+      // throw new Error("Invalid Email");
+      const err = new Error("Invalid Email");
+      err.status = 404
+      throw err;
+    }
 
     if (req.body.inventoryType === "in" && user.userType !== "donar") {
       throw new Error("This email is not registered as a donar");
